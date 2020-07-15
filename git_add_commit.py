@@ -32,13 +32,22 @@ def copy_delete_file(source_file,target_file):
         print("create " + source_path)
     print(source_file)
     print(target_file)
-    shutil.copyfile(source_file,target_file)
+    if os.path.exists(target_file):
+        print("准备删除文件： " + target_file)
+        os.remove(target_file)
+        print("删除了文件： " + target_file)
+    else:
+        print("准备复制文件： " + target_file)
+        shutil.copyfile(source_file,target_file)
+        print("复制了文件： " + target_file)
 
 def git_operating(month, name, times):
     # 根据每月次数循环
     for i in range(times):
         # 选取当前操作文件
-        cur_file=file_list[random.randint(0, len(file_list)-1)]
+        file_index = random.randint(0, len(file_list)-1)
+        print("第 " + str(i) + " 次操作，本次index " +str(file_index) + "\n")
+        cur_file=file_list[file_index]
         # 复制文件/删除文件
         copy_delete_file(cur_file,cur_file.replace("source", "new"))
         # 随机获取时间拼接到年月
@@ -50,7 +59,7 @@ def git_operating(month, name, times):
 
         # git操作
         os.system("git add .")
-        os.system('git commit -m "add ' + cur_file[cur_file.rindex("/"):] +'" --author ' + name + ' --date ' + result_time)
+        os.system('git commit -m "add ' + cur_file[cur_file.rindex("/"):] +'" --author "' + name + '" --date "' + result_time + '"')
 
 
 
